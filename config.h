@@ -1,4 +1,5 @@
 /* See LICENSE file for copyright and license details. */
+#include <X11/XF86keysym.h>
 
 /* appearance */
 static const unsigned int borderpx  = 4;        /* border pixel of windows */
@@ -72,6 +73,20 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_hi, "-sf", col_bg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 
+static const char *cmd_media_next[] = { "playerctl", "next", NULL };
+static const char *cmd_media_prev[] = { "playerctl", "previous", NULL };
+static const char *cmd_media_play[] = { "playerctl", "play-pause", NULL };
+
+static const char *cmd_mic_mute[] = { "pamixer", "--default-source", "--toggle-mute", NULL };
+static const char *cmd_vol_mute[] = { "pamixer", "--toggle-mute", NULL };
+static const char *cmd_vol_ndec[] = { "pamixer", "--decrease", "5", NULL };
+static const char *cmd_vol_sdec[] = { "pamixer", "--decrease", "1", NULL };
+static const char *cmd_vol_ninc[] = { "pamixer", "--increase", "5", NULL };
+static const char *cmd_vol_sinc[] = { "pamixer", "--increase", "1", NULL };
+
+static const char *cmd_bright_up[]   = { "brightnessctl", "set", "+10%", NULL };
+static const char *cmd_bright_down[] = { "brightnessctl", "set", "10%-", NULL };
+
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
@@ -107,6 +122,21 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+
+        { MODKEY,                       XK_Left,   spawn,          {.v = cmd_media_prev } },
+        { MODKEY,                       XK_Right,  spawn,          {.v = cmd_media_next } },
+        { MODKEY,                       XK_Up,     spawn,          {.v = cmd_media_play } },
+        { MODKEY,                       XK_Down,   spawn,          {.v = cmd_media_play } },
+
+        { 0,                  XF86XK_AudioMicMute, spawn,          {.v = cmd_mic_mute } },
+        { 0,                     XF86XK_AudioMute, spawn,          {.v = cmd_vol_mute } },
+        { 0,              XF86XK_AudioLowerVolume, spawn,          {.v = cmd_vol_ndec } },
+        { 0|ShiftMask,    XF86XK_AudioLowerVolume, spawn,          {.v = cmd_vol_sdec } },
+        { 0,              XF86XK_AudioRaiseVolume, spawn,          {.v = cmd_vol_ninc } },
+        { 0|ShiftMask,    XF86XK_AudioRaiseVolume, spawn,          {.v = cmd_vol_sinc } },
+
+        { 0,               XF86XK_MonBrightnessUp, spawn,          {.v = cmd_bright_up } },
+        { 0,             XF86XK_MonBrightnessDown, spawn,          {.v = cmd_bright_down } },
 };
 
 /* button definitions */
