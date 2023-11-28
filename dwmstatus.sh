@@ -6,18 +6,23 @@ while true; do
     "false") vol="$(pamixer --get-volume)%" ;;
   esac
 
-  case "$(cat /sys/class/power_supply/BAT0/status)" in
-    "Discharging") bat_sym="" ;;
-    "Charging")    bat_sym="🠙" ;;
-    *)             bat_sym="❗" ;;
-  esac
-
-  bat_full="$(cat /sys/class/power_supply/BAT0/energy_full)"
-  bat_now="$(cat /sys/class/power_supply/BAT0/energy_now)"
-  bat_perc="$(echo "$bat_now * 100 / $bat_full" | bc)"
-
   date="$(date "+%a, %d. %b  %H:%M")"
 
-  xsetroot -name "🔉${vol}  ${bat_sym}${bat_perc}%  ${date} "
+  if test hostname = "tauron"; then
+    case "$(cat /sys/class/power_supply/BAT0/status)" in
+      "Discharging") bat_sym="v" ;;
+      "Charging")    bat_sym="^" ;;
+      "Full")        bat_sym=""  ;;
+      *)             bat_sym="!" ;;
+    esac
+
+    bat_full="$(cat /sys/class/power_supply/BAT0/energy_full)"
+    bat_now="$(cat /sys/class/power_supply/BAT0/energy_now)"
+    bat_perc="$(echo "$bat_now * 100 / $bat_full" | bc)"
+
+    xsetroot -name " ${vol}  ${bat_sym}${bat_perc}%  ${date} "
+  else
+    xsetroot -name " ${vol}  ${date} "
+  fi
   sleep 1
 done
