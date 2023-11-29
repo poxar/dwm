@@ -12,8 +12,8 @@ while true; do
 
   if test "$(hostname)" = "tauron"; then
     case "$(cat /sys/class/power_supply/BAT0/status)" in
-      "Discharging") bat_sym="v" ;;
-      "Charging")    bat_sym="^" ;;
+      "Discharging") bat_sym="↓" ;;
+      "Charging")    bat_sym="↑" ;;
       "Full")        bat_sym=""  ;;
       *)             bat_sym="!" ;;
     esac
