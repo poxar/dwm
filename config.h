@@ -98,6 +98,7 @@ static const char *cmd_bright_down[] = { "brightnessctl", "set", "10%-", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = clipcmd } },
 	{ MODKEY|ShiftMask,             XK_space,  spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
