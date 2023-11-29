@@ -76,6 +76,8 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_hi, "-sf", col_bg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 
+static const char *clipcmd[] = { "alacritty", "--class", "skim", "--command", "clipcat-menu", NULL};
+
 static const char *cmd_media_next[] = { "playerctl", "next", NULL };
 static const char *cmd_media_prev[] = { "playerctl", "previous", NULL };
 static const char *cmd_media_play[] = { "playerctl", "play-pause", NULL };
@@ -93,6 +95,7 @@ static const char *cmd_bright_down[] = { "brightnessctl", "set", "10%-", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = clipcmd } },
 	{ MODKEY|ShiftMask,             XK_space,  spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
