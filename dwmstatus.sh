@@ -10,7 +10,7 @@ while true; do
 
   date="$(date "+%a, %d. %b  %H:%M")"
 
-  if test hostname = "tauron"; then
+  if test "$(hostname)" = "tauron"; then
     case "$(cat /sys/class/power_supply/BAT0/status)" in
       "Discharging") bat_sym="v" ;;
       "Charging")    bat_sym="^" ;;
