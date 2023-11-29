@@ -71,6 +71,9 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+/* helper to update the statusbar after running the command */
+#define SCMD(cmd) { "/bin/sh", "-c", cmd "&& pkill --signal USR1 dwmstatus.sh", NULL }
+
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_hi, "-sf", col_bg, NULL };
@@ -82,12 +85,12 @@ static const char *cmd_media_next[] = { "playerctl", "next", NULL };
 static const char *cmd_media_prev[] = { "playerctl", "previous", NULL };
 static const char *cmd_media_play[] = { "playerctl", "play-pause", NULL };
 
-static const char *cmd_mic_mute[] = { "pamixer", "--default-source", "--toggle-mute", NULL };
-static const char *cmd_vol_mute[] = { "pamixer", "--toggle-mute", NULL };
-static const char *cmd_vol_ndec[] = { "pamixer", "--decrease", "5", NULL };
-static const char *cmd_vol_sdec[] = { "pamixer", "--decrease", "1", NULL };
-static const char *cmd_vol_ninc[] = { "pamixer", "--increase", "5", NULL };
-static const char *cmd_vol_sinc[] = { "pamixer", "--increase", "1", NULL };
+static const char *cmd_mic_mute[] = SCMD("pamixer --default-source --toggle-mute");
+static const char *cmd_vol_mute[] = SCMD("pamixer --toggle-mute");
+static const char *cmd_vol_ndec[] = SCMD("pamixer --decrease 5");
+static const char *cmd_vol_sdec[] = SCMD("pamixer --decrease 1");
+static const char *cmd_vol_ninc[] = SCMD("pamixer --increase 5");
+static const char *cmd_vol_sinc[] = SCMD("pamixer --increase 1");
 
 static const char *cmd_bright_up[]   = { "brightnessctl", "set", "+10%", NULL };
 static const char *cmd_bright_down[] = { "brightnessctl", "set", "10%-", NULL };

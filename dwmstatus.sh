@@ -1,5 +1,7 @@
 #!/bin/sh
 
+trap "true" USR1
+
 while true; do
   case "$(pamixer --get-mute)" in
     "true")  vol="MUT" ;;
@@ -24,5 +26,7 @@ while true; do
   else
     xsetroot -name " ${vol}  ${date} "
   fi
-  sleep 1
+
+  sleep 10 &
+  wait $!
 done
