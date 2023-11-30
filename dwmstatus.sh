@@ -10,16 +10,17 @@ while true; do
 
   date="$(date "+%a, %d. %b  %H:%M")"
 
-  if test "$(hostname)" = "tauron"; then
-    case "$(cat /sys/class/power_supply/BAT0/status)" in
+  bat0="/sys/class/power_supply/BAT0"
+  if test -f "$bat0/status"; then
+    case "$(cat "$bat0/status")" in
       "Discharging") bat_sym="↓" ;;
       "Charging")    bat_sym="↑" ;;
       "Full")        bat_sym=""  ;;
       *)             bat_sym="!" ;;
     esac
 
-    bat_full="$(cat /sys/class/power_supply/BAT0/energy_full)"
-    bat_now="$(cat /sys/class/power_supply/BAT0/energy_now)"
+    bat_full="$(cat "$bat0/energy_full")"
+    bat_now="$(cat "$bat0/energy_now")"
     bat_perc="$(echo "$bat_now * 100 / $bat_full" | bc)"
 
     xsetroot -name " ${vol}  ${bat_sym}${bat_perc}%  ${date} "
