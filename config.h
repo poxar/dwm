@@ -81,6 +81,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "alacritty", NULL };
 
 static const char *clipcmd[] = { "alacritty", "--class", "skim", "--command", "clipcat-menu", NULL};
+static const char *actcmd[] = { "alacritty", "--class", "skim", "--command", "Code/dwm/actions.sh", NULL};
 
 static const char *cmd_media_next[] = { "playerctl", "next", NULL };
 static const char *cmd_media_prev[] = { "playerctl", "previous", NULL };
@@ -101,6 +102,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_d,      spawn,          {.v = clipcmd } },
+	{ MODKEY,                       XK_g,      spawn,          {.v = actcmd } },
 	{ MODKEY|ShiftMask,             XK_space,  spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
