@@ -45,7 +45,7 @@ static const Rule rules[] = {
 	{ "TelegramDesktop", NULL,       NULL,       1 << 7,       0,           0,           -1 },
 	{ "Signal",          NULL,       NULL,       1 << 7,       0,           0,           -1 },
 	{ "firefox",         "Navigator",NULL,       1 << 8,       0,           0,           -1 },
-	{ "firefox",         "Toolkit",  "Picture-in-Picture", (1<<9)-1,  1,    1,           -1 },
+	{ "firefox",         "Toolkit",  "Picture-in-Picture", (1<<9)-1,  0,    0,           -1 },
 };
 
 /* layout(s) */
