@@ -83,9 +83,9 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const char *clipcmd[] = { "alacritty", "--class", "skim", "--command", "clipcat-menu", NULL};
 static const char *actcmd[] = { "alacritty", "--class", "skim", "--command", "Code/dwm/actions.sh", NULL};
 
-static const char *cmd_media_next[] = { "playerctl", "next", NULL };
-static const char *cmd_media_prev[] = { "playerctl", "previous", NULL };
-static const char *cmd_media_play[] = { "playerctl", "play-pause", NULL };
+static const char *cmd_media_next[] = { "playerctl", "-i", "firefox", "next", NULL };
+static const char *cmd_media_prev[] = { "playerctl", "-i", "firefox", "previous", NULL };
+static const char *cmd_media_play[] = { "playerctl", "-i", "firefox", "play-pause", NULL };
 
 static const char *cmd_mic_mute[] = SCMD("pamixer --default-source --toggle-mute");
 static const char *cmd_vol_mute[] = SCMD("pamixer --toggle-mute");
