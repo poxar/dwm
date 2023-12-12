@@ -97,6 +97,16 @@ static const char *cmd_vol_sinc[] = SCMD("pamixer --increase 1");
 static const char *cmd_bright_up[]   = { "brightnessctl", "set", "+10%", NULL };
 static const char *cmd_bright_down[] = { "brightnessctl", "set", "10%-", NULL };
 
+static const char *cmd_calender[] = {
+  "alacritty",
+  "--option", "window.dimensions.columns=64",
+  "--option", "window.dimensions.lines=10",
+  "--class", "skim",
+  "--command", "sh", "-c",
+  "echo '' && cal -n3 && read -n1",
+  NULL
+};
+
 #include "movestack.c"
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -156,6 +166,7 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
+	{ ClkStatusText,        0,              Button1,        spawn,          {.v = cmd_calender } },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
