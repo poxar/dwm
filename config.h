@@ -80,8 +80,15 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_hi, "-sf", col_bg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 
-static const char *clipcmd[] = { "alacritty", "--class", "skim", "--command", "clipcat-menu", NULL};
-static const char *actcmd[] = { "alacritty", "--class", "skim", "--command", "Code/dwm/actions.sh", NULL};
+static const char *clipcmd[] = {
+  "alacritty", "--class", "skim", "--command", "clipcat-menu",
+  NULL
+};
+
+static const char *actcmd[] = {
+  "alacritty", "--class", "skim", "--command", "Code/dwm/actions.sh",
+  NULL
+};
 
 static const char *scrotcmd[] = {
   "sh", "-c", "cd ~/Pictures/Screenshots && scrot -fs",
