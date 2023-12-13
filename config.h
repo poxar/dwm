@@ -83,6 +83,16 @@ static const char *termcmd[]  = { "alacritty", NULL };
 static const char *clipcmd[] = { "alacritty", "--class", "skim", "--command", "clipcat-menu", NULL};
 static const char *actcmd[] = { "alacritty", "--class", "skim", "--command", "Code/dwm/actions.sh", NULL};
 
+static const char *scrotcmd[] = {
+  "sh", "-c", "cd ~/Pictures/Screenshots && scrot -fs",
+  NULL
+};
+
+static const char *scrotscreencmd[] = {
+  "sh", "-c", "cd ~/Pictures/Screenshots && scrot",
+  NULL
+};
+
 static const char *cmd_media_next[] = { "playerctl", "-i", "firefox", "next", NULL };
 static const char *cmd_media_prev[] = { "playerctl", "-i", "firefox", "previous", NULL };
 static const char *cmd_media_play[] = { "playerctl", "-i", "firefox", "play-pause", NULL };
@@ -143,6 +153,9 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_u,                      6)
 	TAGKEYS(                        XK_i,                      7)
 	TAGKEYS(                        XK_o,                      8)
+
+        { 0,                            XK_Print,  spawn,          {.v = scrotcmd } },
+        { ShiftMask,                    XK_Print,  spawn,          {.v = scrotscreencmd } },
 
 	{ 0,                     XF86XK_AudioPrev, spawn,          {.v = cmd_media_prev } },
 	{ 0,                     XF86XK_AudioNext, spawn,          {.v = cmd_media_next } },
