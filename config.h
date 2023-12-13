@@ -91,12 +91,14 @@ static const char *actcmd[] = {
 };
 
 static const char *scrotcmd[] = {
-  "sh", "-c", "cd ~/Pictures/Screenshots && scrot -fs",
+  "sh", "-c", "cd ~/Pictures/Screenshots && scrot -fs "
+    "-e 'xclip -selection clipboard -t image/png -i $f'",
   NULL
 };
 
 static const char *scrotscreencmd[] = {
-  "sh", "-c", "cd ~/Pictures/Screenshots && scrot",
+  "sh", "-c", "cd ~/Pictures/Screenshots && scrot "
+    "-e 'xclip -selection clipboard -t image/png -i $f'",
   NULL
 };
 
