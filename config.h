@@ -80,15 +80,10 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_hi, "-sf", col_bg, NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 
-static const char *clipcmd[] = {
-  "alacritty", "--class", "skim", "--command", "clipcat-menu",
-  NULL
-};
+#define FLOAT_TERM "alacritty", "--class", "skim", "--option", "window.opacity=1"
 
-static const char *actcmd[] = {
-  "alacritty", "--class", "skim", "--command", "Code/dwm/actions.sh",
-  NULL
-};
+static const char *clipcmd[] = { FLOAT_TERM, "--command", "clipcat-menu", NULL };
+static const char *actcmd[] = { FLOAT_TERM, "--command", "Code/dwm/actions.sh", NULL };
 
 static const char *scrotcmd[] = {
   "sh", "-c", "cd ~/Pictures/Screenshots && scrot -fs "
@@ -117,10 +112,9 @@ static const char *cmd_bright_up[]   = { "brightnessctl", "set", "+10%", NULL };
 static const char *cmd_bright_down[] = { "brightnessctl", "set", "10%-", NULL };
 
 static const char *cmd_calender[] = {
-  "alacritty",
+  FLOAT_TERM,
   "--option", "window.dimensions.columns=64",
   "--option", "window.dimensions.lines=10",
-  "--class", "skim",
   "--command", "sh", "-c",
   "echo '' && cal -n3 && read -n1",
   NULL
