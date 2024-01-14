@@ -39,7 +39,6 @@ static const Rule rules[] = {
 	 */
 	/* class             instance    title       tags mask     iscentered   isfloating   monitor */
 	{ "skim",            NULL,       NULL,       0,            1,           1,           -1 },
-	{ "Gimp",            NULL,       NULL,       0,            0,           1,           -1 },
 	{ "steam",           NULL,       NULL,       1 << 5,       0,           0,           -1 },
 	{ "discord",         NULL,       NULL,       1 << 6,       0,           0,           -1 },
 	{ "TelegramDesktop", NULL,       NULL,       1 << 7,       0,           0,           -1 },
