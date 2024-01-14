@@ -167,9 +167,9 @@ static const Key keys[] = {
 	{ 0,                  XF86XK_AudioMicMute, spawn,          {.v = cmd_mic_mute } },
 	{ 0,                     XF86XK_AudioMute, spawn,          {.v = cmd_vol_mute } },
 	{ 0,              XF86XK_AudioLowerVolume, spawn,          {.v = cmd_vol_ndec } },
-	{ 0|ShiftMask,    XF86XK_AudioLowerVolume, spawn,          {.v = cmd_vol_sdec } },
+	{ ShiftMask,      XF86XK_AudioLowerVolume, spawn,          {.v = cmd_vol_sdec } },
 	{ 0,              XF86XK_AudioRaiseVolume, spawn,          {.v = cmd_vol_ninc } },
-	{ 0|ShiftMask,    XF86XK_AudioRaiseVolume, spawn,          {.v = cmd_vol_sinc } },
+	{ ShiftMask,      XF86XK_AudioRaiseVolume, spawn,          {.v = cmd_vol_sinc } },
 
 	{ 0,               XF86XK_MonBrightnessUp, spawn,          {.v = cmd_bright_up } },
 	{ 0,             XF86XK_MonBrightnessDown, spawn,          {.v = cmd_bright_down } },
