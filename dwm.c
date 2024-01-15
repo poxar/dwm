@@ -142,6 +142,7 @@ struct Monitor {
 	unsigned int seltags;
 	unsigned int sellt;
 	unsigned int tagset[2];
+	int rmaster;
 	int showbar;
 	int topbar;
 	Client *clients;
@@ -254,6 +255,7 @@ static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
+static void togglermaster(const Arg *arg);
 static void toggletag(const Arg *arg);
 static void toggleview(const Arg *arg);
 static void unfocus(Client *c, int setfocus);
@@ -765,6 +767,7 @@ createmon(void)
 	m->tagset[0] = m->tagset[1] = 1;
 	m->mfact = mfact;
 	m->nmaster = nmaster;
+	m->rmaster = rmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
 	m->gappih = gappih;
@@ -2045,6 +2048,7 @@ void
 tile(Monitor *m)
 {
 	unsigned int i, n, h, r, oe = enablegaps, ie = enablegaps, mw, my, ty, bw;
+        unsigned int x, y;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
@@ -2061,20 +2065,33 @@ tile(Monitor *m)
 	}
 
 	if (n > m->nmaster)
-		mw = m->nmaster ? (m->ww + m->gappiv*ie) * m->mfact : 0;
+		mw = m->nmaster
+			? (m->ww + m->gappiv*ie) * (m->rmaster ? 1.0 - m->mfact : m->mfact)
+			: 0;
 	else
 		mw = m->ww - 2*m->gappov*oe + m->gappiv*ie;
 	for (i = 0, my = ty = m->gappoh*oe, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
 			r = MIN(n, m->nmaster) - i;
 			h = (m->wh - my - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
-			resize(c, m->wx + m->gappov*oe, m->wy + my, mw - (2*bw) - m->gappiv*ie, h - (2*bw), bw, 0);
+			if (m->rmaster && n <= m->nmaster && oe == 0)
+				x = m->wx + m->ww - mw + m->gappiv*ie;
+			else if (m->rmaster)
+				x = m->wx + m->ww - mw;
+			else
+				x = m->wx + m->gappov*oe;
+			y = m->wy + my;
+			resize(c, x, y, mw - (2*bw) - m->gappiv*ie, h - (2*bw), bw, 0);
 			if (my + HEIGHT(c) + m->gappih*ie < m->wh)
 			my += HEIGHT(c) + m->gappih*ie;
 		} else {
 			r = n - i;
 			h = (m->wh - ty - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
-			resize(c, m->wx + mw + m->gappov*oe, m->wy + ty, m->ww - mw - (2*bw) - 2*m->gappov*oe, h - (2*bw), bw, 0);
+			x = m->rmaster
+				? m->wx + gappov*oe
+				: m->wx + mw + gappov*oe;
+			y = m->wy + ty;
+			resize(c, x, y, m->ww - mw - (2*bw) - 2*m->gappov*oe, h - (2*bw), bw, 0);
 			if (ty + HEIGHT(c) + m->gappih*ie < m->wh)
 				ty += HEIGHT(c) + m->gappih*ie;
 		}
@@ -2114,6 +2131,16 @@ togglefloating(const Arg *arg)
 			selmon->sel->h - 2 * (borderpx - selmon->sel->bw),
 			borderpx, 0);
 	arrange(selmon);
+}
+
+void
+togglermaster(const Arg *arg)
+{
+	selmon->rmaster = !selmon->rmaster;
+	/* now mfact represents the left factor */
+	selmon->mfact = 1.0 - selmon->mfact;
+	if (selmon->lt[selmon->sellt]->arrange)
+		arrange(selmon);
 }
 
 void
