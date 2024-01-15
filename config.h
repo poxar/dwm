@@ -146,6 +146,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_m,      togglermaster,  {0} },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+
 	TAGKEYS(                        XK_q,                      0)
 	TAGKEYS(                        XK_w,                      1)
 	TAGKEYS(                        XK_e,                      2)
@@ -157,6 +158,18 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_o,                      8)
 	{ MODKEY,                       XK_p,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_p,      tag,            {.ui = ~0 } },
+
+	TAGKEYS(                        XK_1,                      0)
+	TAGKEYS(                        XK_2,                      1)
+	TAGKEYS(                        XK_3,                      2)
+	TAGKEYS(                        XK_4,                      3)
+	TAGKEYS(                        XK_5,                      4)
+	TAGKEYS(                        XK_6,                      5)
+	TAGKEYS(                        XK_7,                      6)
+	TAGKEYS(                        XK_8,                      7)
+	TAGKEYS(                        XK_9,                      8)
+	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
 
         { 0,                            XK_Print,  spawn,          {.v = scrotcmd } },
         { ShiftMask,                    XK_Print,  spawn,          {.v = scrotscreencmd } },
