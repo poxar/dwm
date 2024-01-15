@@ -122,8 +122,7 @@ static const char *cmd_calender[] = {
 #include "movestack.c"
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_p,      spawn,          {.v = clipcmd } },
+	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_v,      spawn,          {.v = clipcmd } },
 	{ MODKEY,                       XK_g,      spawn,          {.v = actcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
@@ -156,6 +155,8 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_u,                      6)
 	TAGKEYS(                        XK_i,                      7)
 	TAGKEYS(                        XK_o,                      8)
+	{ MODKEY,                       XK_p,      view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             XK_p,      tag,            {.ui = ~0 } },
 
         { 0,                            XK_Print,  spawn,          {.v = scrotcmd } },
         { ShiftMask,                    XK_Print,  spawn,          {.v = scrotscreencmd } },
