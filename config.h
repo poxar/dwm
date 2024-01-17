@@ -68,12 +68,6 @@ static const Layout layouts[] = {
 	{ MODKEY|ShiftMask,             KEY,      tag,            {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask|ShiftMask, KEY,      toggletag,      {.ui = 1 << TAG} },
 
-/* helper for spawning shell commands in the pre dwm-5.0 fashion */
-#define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
-
-/* helper to update the statusbar after running the command */
-#define SCMD(cmd) { "/bin/sh", "-c", cmd "&& pkill --signal USR1 dwmstatus.sh", NULL }
-
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_bg, "-nf", col_fg, "-sb", col_hi, "-sf", col_bg, NULL };
@@ -81,34 +75,7 @@ static const char *termcmd[]  = { "alacritty", NULL };
 
 #define FLOAT_TERM "alacritty", "--class", "skim", "--option", "window.opacity=1"
 
-static const char *clipcmd[] = { FLOAT_TERM, "--command", "clipcat-menu", NULL };
 static const char *actcmd[] = { FLOAT_TERM, "--command", "Code/dwm/actions.sh", NULL };
-
-static const char *scrotcmd[] = {
-  "sh", "-c", "cd ~/Pictures/Screenshots && scrot -fs "
-    "-e 'xclip -selection clipboard -t image/png -i $f'",
-  NULL
-};
-
-static const char *scrotscreencmd[] = {
-  "sh", "-c", "cd ~/Pictures/Screenshots && scrot "
-    "-e 'xclip -selection clipboard -t image/png -i $f'",
-  NULL
-};
-
-static const char *cmd_media_next[] = { "playerctl", "-i", "firefox", "next", NULL };
-static const char *cmd_media_prev[] = { "playerctl", "-i", "firefox", "previous", NULL };
-static const char *cmd_media_play[] = { "playerctl", "-i", "firefox", "play-pause", NULL };
-
-static const char *cmd_mic_mute[] = SCMD("pamixer --default-source --toggle-mute");
-static const char *cmd_vol_mute[] = SCMD("pamixer --toggle-mute");
-static const char *cmd_vol_ndec[] = SCMD("pamixer --decrease 5");
-static const char *cmd_vol_sdec[] = SCMD("pamixer --decrease 1");
-static const char *cmd_vol_ninc[] = SCMD("pamixer --increase 5");
-static const char *cmd_vol_sinc[] = SCMD("pamixer --increase 1");
-
-static const char *cmd_bright_up[]   = { "brightnessctl", "set", "+10%", NULL };
-static const char *cmd_bright_down[] = { "brightnessctl", "set", "10%-", NULL };
 
 static const char *cmd_calender[] = {
   FLOAT_TERM,
@@ -123,7 +90,6 @@ static const char *cmd_calender[] = {
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
-	{ MODKEY,                       XK_v,      spawn,          {.v = clipcmd } },
 	{ MODKEY,                       XK_g,      spawn,          {.v = actcmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_c,      spawn,          {.v = termcmd } },
@@ -170,23 +136,6 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_0,      tag,            {.ui = ~0 } },
-
-        { 0,                            XK_Print,  spawn,          {.v = scrotcmd } },
-        { ShiftMask,                    XK_Print,  spawn,          {.v = scrotscreencmd } },
-
-	{ 0,                     XF86XK_AudioPrev, spawn,          {.v = cmd_media_prev } },
-	{ 0,                     XF86XK_AudioNext, spawn,          {.v = cmd_media_next } },
-	{ 0,                     XF86XK_AudioPlay, spawn,          {.v = cmd_media_play } },
-
-	{ 0,                  XF86XK_AudioMicMute, spawn,          {.v = cmd_mic_mute } },
-	{ 0,                     XF86XK_AudioMute, spawn,          {.v = cmd_vol_mute } },
-	{ 0,              XF86XK_AudioLowerVolume, spawn,          {.v = cmd_vol_ndec } },
-	{ ShiftMask,      XF86XK_AudioLowerVolume, spawn,          {.v = cmd_vol_sdec } },
-	{ 0,              XF86XK_AudioRaiseVolume, spawn,          {.v = cmd_vol_ninc } },
-	{ ShiftMask,      XF86XK_AudioRaiseVolume, spawn,          {.v = cmd_vol_sinc } },
-
-	{ 0,               XF86XK_MonBrightnessUp, spawn,          {.v = cmd_bright_up } },
-	{ 0,             XF86XK_MonBrightnessDown, spawn,          {.v = cmd_bright_down } },
 };
 
 /* button definitions */
