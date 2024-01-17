@@ -30,6 +30,11 @@ static const char *colors[][3]      = {
 	[SchemeSel]  = { col_bg, col_hi, col_hi },
 };
 
+static const char *const autostart[] = {
+	"Code/dwm/dwmstatus.sh", NULL,
+	NULL /* terminate */
+};
+
 /* tagging */
 static const char *tags[] = { "q", "w", "e", "r", "t", "y", "u", "i", "o" };
 
