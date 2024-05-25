@@ -8,6 +8,11 @@ while true; do
     "false") vol="$(pamixer --get-volume)%" ;;
   esac
 
+  case "$(pamixer --default-source --get-mute)" in
+    "true")  mic="" ;;
+    "false") mic="REC " ;;
+  esac
+
   date="$(date "+%a, %d. %b  %H:%M")"
 
   bat0="/sys/class/power_supply/BAT0"
@@ -23,9 +28,9 @@ while true; do
     bat_now="$(cat "$bat0/energy_now")"
     bat_perc="$(echo "$bat_now * 100 / $bat_full" | bc)"
 
-    xsetroot -name " ${vol}  ${bat_sym}${bat_perc}%  ${date} "
+    xsetroot -name " ${mic}${vol}  ${bat_sym}${bat_perc}%  ${date} "
   else
-    xsetroot -name " ${vol}  ${date} "
+    xsetroot -name " ${mic}${vol}  ${date} "
   fi
 
   sleep 10 &

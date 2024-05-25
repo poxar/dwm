@@ -4,12 +4,12 @@
 /* appearance */
 static const unsigned int borderpx  = 4;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
-static const int rmaster            = 1;        /* 1 means master-area is initially on the right */
+static const int rmaster            = 0;        /* 1 means master-area is initially on the right */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayonleft = 1;    /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
-static const int showsystray        = 1;        /* 0 means no systray */
+static const int showsystray        = 0;        /* 0 means no systray */
 static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 20;       /* vert inner gap between windows */
 static const unsigned int gappoh    = 20;       /* horiz outer gap between windows and screen edge */
@@ -43,12 +43,12 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class             instance    title       tags mask     iscentered   isfloating   monitor */
-	{ "steam",           NULL,       NULL,       1 << 5,       0,           0,           -1 },
-	{ "discord",         NULL,       NULL,       1 << 6,       0,           0,           -1 },
-	{ "TelegramDesktop", NULL,       NULL,       1 << 7,       0,           0,           -1 },
-	{ "Signal",          NULL,       NULL,       1 << 7,       0,           0,           -1 },
-	{ "firefox",         "Navigator",NULL,       1 << 8,       0,           0,           -1 },
-	{ "firefox",         "Toolkit",  "Picture-in-Picture", (1<<9)-1,  0,    0,           -1 },
+	{ "firefox",         "Toolkit",  "Picture-in-Picture", (1<<9)-1,  0,    1,           -1 },
+	{ "steam",           NULL,       NULL,       1 << 6,       0,           0,           -1 },
+	{ "Spotify",         NULL,       NULL,       1 << 7,       0,           0,           -1 },
+	{ "discord",         NULL,       NULL,       1 << 8,       0,           0,           -1 },
+	{ "TelegramDesktop", NULL,       NULL,       1 << 8,       0,           0,           -1 },
+	{ "Signal",          NULL,       NULL,       1 << 8,       0,           0,           -1 },
 };
 
 /* layout(s) */
@@ -77,7 +77,8 @@ static const char *dmenucmd[] = { "rofi", "-show", "combi", NULL };
 static const char *termcmd[]  = { "alacritty", NULL };
 
 static const char *actcmd[] = { "rofi", "-show", "dwm", "-modes", "dwm:Code/dwm/actions.sh,emoji", NULL };
-static const char *clipcmd[] = { "clipcat-menu", "-f", "rofi", NULL };
+static const char *sesscmd[] = { "rofi", "-show", "sessions", "-modes", "sessions:Code/dwm/sessions.sh", NULL };
+static const char *notecmd[] = { "alacritty", "--working-directory", "Notes", "-e", "nvim", "Eingang.md", NULL};
 
 #include "movestack.c"
 static const Key keys[] = {
@@ -85,8 +86,9 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_c,      spawn,          {.v = termcmd } },
-	{ MODKEY,                       XK_v,      spawn,          {.v = clipcmd } },
 	{ MODKEY,                       XK_semicolon, spawn,       {.v = actcmd } },
+	{ MODKEY,                       XK_s,      spawn,          {.v = sesscmd } },
+	{ MODKEY,                       XK_n,      spawn,          {.v = notecmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -98,12 +100,14 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-        { Mod1Mask,                     XK_Tab,    view,           {0} },
+	{ Mod1Mask,                     XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             XK_Tab,    tag,            {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_m,      togglermaster,  {0} },
+	{ MODKEY,                       XK_comma,  focusmon,       {.i = -1 } },
+	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
 
@@ -145,7 +149,7 @@ static const Button buttons[] = {
 	{ ClkClientWin,         Mod1Mask,       Button1,        movemouse,      {0} },
 	{ ClkClientWin,         Mod1Mask,       Button2,        togglefloating, {0} },
 	{ ClkClientWin,         Mod1Mask,       Button3,        resizemouse,    {0} },
-	{ ClkClientWin,         Mod1Mask|ShiftMask,       Button1,        resizemouse,    {0} },
+	{ ClkClientWin,         Mod1Mask|ShiftMask, Button1,    resizemouse,    {0} },
 	{ ClkTagBar,            0,              Button1,        view,           {0} },
 	{ ClkTagBar,            0,              Button3,        toggleview,     {0} },
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
