@@ -2,12 +2,9 @@
 set -eu
 
 if test "$ROFI_RETV" = "0"; then
-  find ~/Code -mindepth 1 -maxdepth 1 -type d
+  cd ~/Code
+  fd -Is 'Session.vim' | xargs dirname
   exit 0
 fi
 
-if test -f "$@/Session.vim"; then
-  coproc (alacritty --working-directory "$@" -e nvim -S Session.vim)
-else
-  coproc (alacritty --working-directory "$@" -e nvim "+Telescope find_files")
-fi
+coproc (alacritty --working-directory "$HOME/Code/$@" -e nvim -S Session.vim)
