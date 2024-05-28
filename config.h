@@ -2,7 +2,7 @@
 #include <X11/XF86keysym.h>
 
 /* appearance */
-static const unsigned int borderpx  = 4;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int rmaster            = 0;        /* 1 means master-area is initially on the right */
 static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
