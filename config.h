@@ -33,6 +33,7 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class             instance    title       tags mask     iscentered   isfloating   monitor */
+	{ "Alacritty",       "screencast", NULL,     1 << 5,       0,           0,           -1 },
 	{ "firefox",         "Toolkit",  "Picture-in-Picture", (1<<9)-1,  0,    1,           -1 },
 	{ "steam",           NULL,       NULL,       1 << 6,       0,           0,           -1 },
 	{ "Spotify",         NULL,       NULL,       1 << 7,       0,           0,           -1 },
