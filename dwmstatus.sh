@@ -2,8 +2,6 @@
 
 trap "true" USR1
 
-# TODO:   iwgetid
-
 while true; do
   case "$(pamixer --get-mute)" in
   "true") vol="MUT" ;;
@@ -21,17 +19,29 @@ while true; do
   bat0="/sys/class/power_supply/BAT0"
   if test -f "$bat0/status"; then
     case "$(cat "$bat0/status")" in
-    "Discharging") bat_sym="↓" ;;
-    "Charging") bat_sym="↑" ;;
-    "Full") bat_sym="" ;;
-    *) bat_sym="!" ;;
+    "Discharging") bat_stat="↓" ;;
+    "Charging") bat_stat="↑" ;;
+    "Full") bat_stat="" ;;
+    *) bat_stat="!" ;;
     esac
 
     bat_full="$(cat "$bat0/energy_full")"
     bat_now="$(cat "$bat0/energy_now")"
     bat_perc="$(echo "$bat_now * 100 / $bat_full" | bc)"
 
-    xsetroot -name " ${mic}${vol}   ${bat_sym}${bat_perc}%  ${date} "
+    if test $bat_perc -ge 80; then
+      bat_sym=" "
+    elif test $bat_perc -ge 50; then
+      bat_sym=" "
+    elif test $bat_perc -ge 25; then
+      bat_sym=" "
+    elif test $bat_perc -ge 10; then
+      bat_sym=" "
+    else
+      bat_sym=" "
+    fi
+
+    xsetroot -name " ${mic}${vol}  ${bat_sym}${bat_stat}  ${date} "
   else
     xsetroot -name " ${mic}${vol}  ${date} "
   fi
