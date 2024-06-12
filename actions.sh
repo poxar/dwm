@@ -2,7 +2,7 @@
 set -eu
 
 case "$*" in
-  "Lock screen") coproc (xsecurelock) ;;
+  "Lock screen") coproc (slock) ;;
   "Quit") pkill dwm ;;
   "Poweroff") exec systemctl poweroff ;;
   "Reboot") exec systemctl reboot ;;
