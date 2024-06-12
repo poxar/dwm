@@ -2,6 +2,22 @@
 
 trap "true" USR1
 
+bat_symbol() {
+  bat_perc="$1"
+
+  if test "$bat_perc" -ge 90; then
+    echo " "
+  elif test "$bat_perc" -ge 75; then
+    echo " "
+  elif test "$bat_perc" -ge 50; then
+    echo " "
+  elif test "$bat_perc" -ge 25; then
+    echo " "
+  else
+    echo " "
+  fi
+}
+
 while true; do
   case "$(pamixer --get-mute)" in
   "true") vol="MUT" ;;
@@ -18,30 +34,19 @@ while true; do
 
   bat0="/sys/class/power_supply/BAT0"
   if test -f "$bat0/status"; then
-    case "$(cat "$bat0/status")" in
-    "Discharging") bat_stat="↓" ;;
-    "Charging") bat_stat="↑" ;;
-    "Full") bat_stat="" ;;
-    *) bat_stat="!" ;;
-    esac
-
     bat_full="$(cat "$bat0/energy_full")"
     bat_now="$(cat "$bat0/energy_now")"
     bat_perc="$(echo "$bat_now * 100 / $bat_full" | bc)"
 
-    if test $bat_perc -ge 80; then
-      bat_sym=" "
-    elif test $bat_perc -ge 50; then
-      bat_sym=" "
-    elif test $bat_perc -ge 25; then
-      bat_sym=" "
-    elif test $bat_perc -ge 10; then
-      bat_sym=" "
-    else
-      bat_sym=" "
-    fi
+    case "$(cat "$bat0/status")" in
+    "Discharging") bat_stat=$(bat_symbol "$bat_perc") ;;
+    "Charging") bat_stat=" $(bat_symbol "$bat_perc")" ;;
+    "Not Charging") bat_stat="!" ;;
+    "Full") bat_stat="" ;;
+    *) bat_stat="? " ;;
+    esac
 
-    xsetroot -name " ${mic}${vol}  ${bat_sym}${bat_stat}  ${date} "
+    xsetroot -name " ${mic}${vol}  ${bat_stat}  ${date} "
   else
     xsetroot -name " ${mic}${vol}  ${date} "
   fi
