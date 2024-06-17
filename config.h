@@ -36,6 +36,7 @@ static const Rule rules[] = {
 	{ "Alacritty",       "screencast", NULL,     1 << 5,       0,           0,           -1 },
 	{ "firefox",         "Toolkit",  "Picture-in-Picture", (1<<9)-1,  0,    1,           -1 },
 	{ "steam",           NULL,       NULL,       1 << 6,       0,           0,           -1 },
+	{ "Audacious",       NULL,       NULL,       1 << 7,       0,           0,           -1 },
 	{ "Spotify",         NULL,       NULL,       1 << 7,       0,           0,           -1 },
 	{ "discord",         NULL,       NULL,       1 << 8,       0,           0,           -1 },
 	{ "TelegramDesktop", NULL,       NULL,       1 << 8,       0,           0,           -1 },
