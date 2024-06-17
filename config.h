@@ -73,6 +73,8 @@ static const char *actcmd[] = { "rofi", "-show", "dwm", "-modes", "dwm:Code/dwm/
 static const char *sesscmd[] = { "rofi", "-show", "sessions", "-modes", "sessions:Code/dwm/sessions.sh", NULL };
 static const char *notecmd[] = { "alacritty", "--working-directory", "Notes", "-e", "nvim", "Eingang.md", NULL};
 static const char *filecmd[] = { "rofi", "-show", "files", "-modes", "files:Code/dwm/files.sh", NULL};
+static const char *explcmd[] = { "thunar", NULL };
+static const char *musicmd[] = { "thunar", "Music", NULL };
 
 #include "movestack.c"
 static const Key keys[] = {
@@ -84,6 +86,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_s,      spawn,          {.v = sesscmd } },
 	{ MODKEY,                       XK_n,      spawn,          {.v = notecmd } },
 	{ MODKEY,                       XK_f,      spawn,          {.v = filecmd } },
+	{ MODKEY|ShiftMask,             XK_f,      spawn,          {.v = explcmd } },
+	{ MODKEY|ShiftMask,             XK_m,      spawn,          {.v = musicmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
