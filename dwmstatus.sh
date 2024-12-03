@@ -20,17 +20,16 @@ bat_symbol() {
 
 while true; do
   case "$(pamixer --get-mute)" in
-  "true") vol="MUT" ;;
-  "false") vol="$(pamixer --get-volume)%" ;;
+  "true") vol=" " ;;
+  "false") vol=" " ;;
   esac
-  vol="󰕾 $vol"
 
   case "$(pamixer --default-source --get-mute)" in
   "true") mic="" ;;
-  "false") mic="REC " ;;
+  "false") mic=" " ;;
   esac
 
-  date="󰨲 $(date "+%a, %d. %b  %H:%M")"
+  date=" $(date "+%a, %d. %b  %H:%M")"
 
   bat0="/sys/class/power_supply/BAT0"
   if test -f "$bat0/status"; then
@@ -46,9 +45,9 @@ while true; do
     *) bat_stat="? " ;;
     esac
 
-    xsetroot -name " ${mic}${vol}  ${bat_stat}  ${date} "
+    xsetroot -name "       ${bat_stat} ${mic}${vol} ${date} "
   else
-    xsetroot -name " ${mic}${vol}  ${date} "
+    xsetroot -name "       ${mic}${vol} ${date} "
   fi
 
   sleep 10 &
