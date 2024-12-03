@@ -31,13 +31,13 @@ while true; do
 
   date=" $(date "+%a, %d. %b  %H:%M")"
 
-  bat0="/sys/class/power_supply/BAT0"
-  if test -f "$bat0/status"; then
-    bat_full="$(cat "$bat0/energy_full")"
-    bat_now="$(cat "$bat0/energy_now")"
+  bat="/sys/class/power_supply/BAT1"
+  if test -f "$bat/status"; then
+    bat_full="$(cat "$bat/charge_full")"
+    bat_now="$(cat "$bat/charge_now")"
     bat_perc="$(echo "$bat_now * 100 / $bat_full" | bc)"
 
-    case "$(cat "$bat0/status")" in
+    case "$(cat "$bat/status")" in
     "Discharging") bat_stat=$(bat_symbol "$bat_perc") ;;
     "Charging") bat_stat=" $(bat_symbol "$bat_perc")" ;;
     "Not Charging") bat_stat="!" ;;
@@ -45,7 +45,7 @@ while true; do
     *) bat_stat="? " ;;
     esac
 
-    xsetroot -name "       ${bat_stat} ${mic}${vol} ${date} "
+    xsetroot -name "       ${bat_stat} ${vol} ${date} "
   else
     xsetroot -name "       ${mic}${vol} ${date} "
   fi
