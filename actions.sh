@@ -4,10 +4,10 @@ set -eu
 case "$*" in
   "Lock screen") coproc (slock) ;;
   "Quit") pkill dwm ;;
-  "Poweroff") exec systemctl poweroff ;;
-  "Reboot") exec systemctl reboot ;;
-  "Hibernate") exec systemctl hibernate ;;
-  "Suspend") exec systemctl suspend ;;
+  "Poweroff") coproc systemctl poweroff ;;
+  "Reboot") coproc systemctl reboot ;;
+  "Hibernate") coproc systemctl hibernate ;;
+  "Suspend") coproc systemctl suspend ;;
   *)
     echo "Lock screen"
     echo "Quit"
