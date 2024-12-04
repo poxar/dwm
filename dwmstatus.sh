@@ -29,6 +29,11 @@ while true; do
   "false") mic=" " ;;
   esac
 
+  case "$(dunstctl is-paused)" in
+  "true") noti="󰂛 " ;;
+  "false") noti="" ;;
+  esac
+
   date=" $(date "+%a, %d. %b  %H:%M")"
 
   bat="/sys/class/power_supply/BAT1"
@@ -45,9 +50,9 @@ while true; do
     *) bat_stat="? " ;;
     esac
 
-    xsetroot -name "       ${bat_stat} ${vol} ${date} "
+    xsetroot -name "       ${noti}${vol} ${bat_stat} ${date} "
   else
-    xsetroot -name "       ${mic}${vol} ${date} "
+    xsetroot -name "       ${noti}${mic}${vol} ${date} "
   fi
 
   sleep 10 &
