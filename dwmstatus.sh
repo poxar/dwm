@@ -34,7 +34,7 @@ while true; do
   "false") noti="" ;;
   esac
 
-  date=" $(date "+%a, %d. %b  %H:%M")"
+  date="$(date "+%H:%M")"
 
   bat="/sys/class/power_supply/BAT1"
   if test -f "$bat/status"; then

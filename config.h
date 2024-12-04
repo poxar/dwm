@@ -17,15 +17,17 @@ static const char *fonts[]          = { "FiraCode Nerd Font Light:size=11" };
 static const char col_fg[] = "#fafafa";
 static const char col_bg[] = "#000000";
 static const char col_hi[] = "#6a6868";
+static const char col_h2[] = "#844b8f";
 
 static const char *colors[][3]      = {
 	/*               fg      bg      border   */
 	[SchemeNorm] = { col_fg, col_bg, col_hi },
-	[SchemeSel]  = { col_fg, col_hi, col_bg },
+	[SchemeSel]  = { col_h2, col_bg, col_bg },
 };
 
 /* tagging */
-static const char *tags[] = { "q", "w", "e", "r", "t", "y", "u", "i", "o" };
+static const char *tags[] = { "", "", "", "", "", "", "", "", "" };
+static const char *alttags[] = { "", "", "", "", "", "", "", "", "" };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -50,9 +52,9 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "[M]",      monocle },
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ "",      tile },    /* first entry is default */
+	{ "",      monocle },
+	{ "󰆟",      NULL },    /* no layout function means floating behavior */
 };
 
 /* key definitions */
