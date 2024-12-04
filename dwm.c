@@ -751,7 +751,7 @@ void
 drawbar(Monitor *m)
 {
 	int x, w, tw = 0;
-	unsigned int i, occ = 0, urg = 0;
+	unsigned int i, occ = 0;
 	const char *tagtext;
 	Client *c;
 
@@ -767,15 +767,13 @@ drawbar(Monitor *m)
 
 	for (c = m->clients; c; c = c->next) {
 		occ |= c->tags;
-		if (c->isurgent)
-			urg |= c->tags;
 	}
 	x = 0;
 	for (i = 0; i < LENGTH(tags); i++) {
 		tagtext = occ & 1 << i ? alttags[i] : tags[i];
 		w = TEXTW(tagtext);
  		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
-		drw_text(drw, x, 0, w, bh, lrpad / 2, tagtext, urg & 1 << i);
+		drw_text(drw, x, 0, w, bh, lrpad / 2, tagtext, 0);
 		x += w;
 	}
 	w = TEXTW(m->ltsymbol);
