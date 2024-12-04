@@ -21,7 +21,7 @@ bat_symbol() {
 while true; do
   case "$(pamixer --get-mute)" in
   "true") vol=" " ;;
-  "false") vol=" " ;;
+  "false") vol="" ;;
   esac
 
   case "$(pamixer --default-source --get-mute)" in
