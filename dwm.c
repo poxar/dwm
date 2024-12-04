@@ -1774,6 +1774,12 @@ togglebar(const Arg *arg)
 	updatebarpos(selmon);
 	XMoveResizeWindow(dpy, selmon->barwin, selmon->wx, selmon->by, selmon->ww, bh);
 	arrange(selmon);
+
+	if (selmon->showbar) {
+		system("dwm_bar_visible true");
+	} else {
+		system("dwm_bar_visible false");
+	}
 }
 
 void
