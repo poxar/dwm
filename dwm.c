@@ -164,6 +164,7 @@ static void configure(Client *c);
 static void configurenotify(XEvent *e);
 static void configurerequest(XEvent *e);
 static Monitor *createmon(void);
+static void deck(Monitor *m);
 static void destroynotify(XEvent *e);
 static void detach(Client *c);
 static void detachstack(Client *c);
@@ -703,6 +704,51 @@ destroynotify(XEvent *e)
 
 	if ((c = wintoclient(ev->window)))
 		unmanage(c, 1);
+}
+
+void
+deck(Monitor *m) {
+	unsigned int i, n, h, mw, my;
+	unsigned int r, oe = enablegaps, ie = enablegaps, ty, bw;
+	unsigned int x, y;
+	Client *c;
+
+	for(n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
+	if(n == 0)
+		return;
+
+	if (n == 1) bw = 0;
+	else bw = borderpx;
+
+	if(n > m->nmaster) {
+		mw = m->nmaster
+			? (m->ww + m->gappiv*ie) * (m->rmaster ? 1.0 - m->mfact : m->mfact)
+			: 0;
+		snprintf(m->ltsymbol, sizeof m->ltsymbol, " %d", n - m->nmaster);
+	}
+	else
+		mw = m->ww - 2*m->gappov*oe + m->gappiv*ie;
+	for(i = 0, my = ty = m->gappoh*oe, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		if(i < m->nmaster) {
+			r = MIN(n, m->nmaster) - i;
+			h = (m->wh - my - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
+			if (m->rmaster && n <= m->nmaster && oe == 0)
+				x = m->wx + m->ww - mw + m->gappiv*ie;
+			else if (m->rmaster)
+				x = m->wx + m->ww - mw;
+			else
+				x = m->wx + m->gappov*oe;
+			y = m->wy + my;
+			resize(c, x, y, mw - (2*bw) - m->gappiv*ie, h - (2*bw), bw, False);
+			my += HEIGHT(c) + m->gappih*ie;
+		}
+		else {
+			h = (m->wh - ty - m->gappoh*oe);
+			x = m->rmaster
+				? m->wx + gappov*oe
+				: m->wx + mw + gappov*oe;
+			resize(c, x, m->wy+ty, m->ww - mw - (2*bw) - 2*m->gappov*oe, h - (2*bw), bw, False);
+		}
 }
 
 void
@@ -1718,7 +1764,7 @@ void
 tile(Monitor *m)
 {
 	unsigned int i, n, h, r, oe = enablegaps, ie = enablegaps, mw, my, ty, bw;
-        unsigned int x, y;
+	unsigned int x, y;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
