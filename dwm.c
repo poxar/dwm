@@ -119,10 +119,6 @@ struct Monitor {
 	int by;               /* bar geometry */
 	int mx, my, mw, mh;   /* screen size */
 	int wx, wy, ww, wh;   /* window area  */
-	int gappih;           /* horizontal gap between windows */
-	int gappiv;           /* vertical gap between windows */
-	int gappoh;           /* horizontal outer gaps */
-	int gappov;           /* vertical outer gaps */
 	unsigned int seltags;
 	unsigned int sellt;
 	unsigned int tagset[2];
@@ -249,7 +245,6 @@ static char stext[256];
 static int screen;
 static int sw, sh;           /* X display screen geometry width, height */
 static int bh;               /* bar height */
-static int enablegaps = 1;   /* enables gaps, used by togglegaps */
 static int lrpad;            /* sum of left and right padding for text */
 static int (*xerrorxlib)(Display *, XErrorEvent *);
 static unsigned int numlockmask = 0;
@@ -674,10 +669,6 @@ createmon(void)
 	m->rmaster = rmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
-	m->gappih = gappih;
-	m->gappiv = gappiv;
-	m->gappoh = gappoh;
-	m->gappov = gappov;
 	m->lt[0] = &layouts[0];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
@@ -708,8 +699,7 @@ destroynotify(XEvent *e)
 
 void
 deck(Monitor *m) {
-	unsigned int i, n, h, mw, my;
-	unsigned int r, oe = enablegaps, ie = enablegaps, ty, bw;
+	unsigned int i, n, h, mw, my, ty, bw;
 	unsigned int x, y;
 	Client *c;
 
@@ -722,32 +712,29 @@ deck(Monitor *m) {
 
 	if(n > m->nmaster) {
 		mw = m->nmaster
-			? (m->ww + m->gappiv*ie) * (m->rmaster ? 1.0 - m->mfact : m->mfact)
+			? m->ww * (m->rmaster ? 1.0 - m->mfact : m->mfact)
 			: 0;
 		snprintf(m->ltsymbol, sizeof m->ltsymbol, " %d", n - m->nmaster);
 	}
 	else
-		mw = m->ww - 2*m->gappov*oe + m->gappiv*ie;
-	for(i = 0, my = ty = m->gappoh*oe, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		mw = m->ww;
+	for(i = my = ty= 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if(i < m->nmaster) {
-			r = MIN(n, m->nmaster) - i;
-			h = (m->wh - my - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
-			if (m->rmaster && n <= m->nmaster && oe == 0)
-				x = m->wx + m->ww - mw + m->gappiv*ie;
-			else if (m->rmaster)
+			h = (m->wh - my) / MIN(n, m->nmaster) - i;
+			if (m->rmaster)
 				x = m->wx + m->ww - mw;
 			else
-				x = m->wx + m->gappov*oe;
+				x = m->wx;
 			y = m->wy + my;
-			resize(c, x, y, mw - (2*bw) - m->gappiv*ie, h - (2*bw), bw, False);
-			my += HEIGHT(c) + m->gappih*ie;
+			resize(c, x, y, mw - (2*bw), h - (2*bw), bw, False);
+			my += HEIGHT(c);
 		}
 		else {
-			h = (m->wh - ty - m->gappoh*oe);
+			h = (m->wh - ty);
 			x = m->rmaster
-				? m->wx + gappov*oe
-				: m->wx + mw + gappov*oe;
-			resize(c, x, m->wy+ty, m->ww - mw - (2*bw) - 2*m->gappov*oe, h - (2*bw), bw, False);
+				? m->wx
+				: m->wx + mw;
+			resize(c, x, m->wy+ty, m->ww - mw - (2*bw), h - (2*bw), bw, False);
 		}
 }
 
@@ -1763,7 +1750,7 @@ tagmon(const Arg *arg)
 void
 tile(Monitor *m)
 {
-	unsigned int i, n, h, r, oe = enablegaps, ie = enablegaps, mw, my, ty, bw;
+	unsigned int i, n, h, mw, my, ty, bw;
 	unsigned int x, y;
 	Client *c;
 
@@ -1776,40 +1763,27 @@ tile(Monitor *m)
 	else
 		bw = borderpx;
 
-	if (smartgaps == n) {
-		oe = 0; // outer gaps disabled
-	}
-
 	if (n > m->nmaster)
 		mw = m->nmaster
-			? (m->ww + m->gappiv*ie) * (m->rmaster ? 1.0 - m->mfact : m->mfact)
+			? m->ww * (m->rmaster ? 1.0 - m->mfact : m->mfact)
 			: 0;
 	else
-		mw = m->ww - 2*m->gappov*oe + m->gappiv*ie;
-	for (i = 0, my = ty = m->gappoh*oe, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		mw = m->ww;
+	for (i = my = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
-			r = MIN(n, m->nmaster) - i;
-			h = (m->wh - my - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
-			if (m->rmaster && n <= m->nmaster && oe == 0)
-				x = m->wx + m->ww - mw + m->gappiv*ie;
-			else if (m->rmaster)
+			h = (m->wh - my) / MIN(n, m->nmaster) - i;
+			if (m->rmaster)
 				x = m->wx + m->ww - mw;
 			else
-				x = m->wx + m->gappov*oe;
+				x = m->wx;
 			y = m->wy + my;
-			resize(c, x, y, mw - (2*bw) - m->gappiv*ie, h - (2*bw), bw, 0);
-			if (my + HEIGHT(c) + m->gappih*ie < m->wh)
-			my += HEIGHT(c) + m->gappih*ie;
+			resize(c, x, y, mw - (2*bw), h - (2*bw), bw, 0);
+			my += HEIGHT(c);
 		} else {
-			r = n - i;
-			h = (m->wh - ty - m->gappoh*oe - m->gappih*ie * (r - 1)) / r;
-			x = m->rmaster
-				? m->wx + gappov*oe
-				: m->wx + mw + gappov*oe;
-			y = m->wy + ty;
-			resize(c, x, y, m->ww - mw - (2*bw) - 2*m->gappov*oe, h - (2*bw), bw, 0);
-			if (ty + HEIGHT(c) + m->gappih*ie < m->wh)
-				ty += HEIGHT(c) + m->gappih*ie;
+ 			h = (m->wh - ty) / (n - i);
+			resize(c, m->rmaster ? m->wx : m->wx + mw, m->wy + ty,
+			       m->ww - mw - (2*bw), h - (2*bw), bw, 0);
+ 			ty += HEIGHT(c);
 		}
 }
 
