@@ -699,42 +699,50 @@ destroynotify(XEvent *e)
 
 void
 deck(Monitor *m) {
-	unsigned int i, n, h, mw, my, ty, bw;
+	unsigned int i, n, h, mw, my, ty, ns;
 	unsigned int x, y;
+	unsigned int gap = gappx;
+	unsigned int bw = borderpx;
 	Client *c;
 
 	for(n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
 	if(n == 0)
 		return;
 
-	if (n == 1) bw = 0;
-	else bw = borderpx;
+	if (n == 1) {
+		gap = 0;
+		bw = 0;
+	};
 
 	if(n > m->nmaster) {
 		mw = m->nmaster
 			? m->ww * (m->rmaster ? 1.0 - m->mfact : m->mfact)
 			: 0;
+		ns = m->nmaster > 0 ? 2 : 1;
 		snprintf(m->ltsymbol, sizeof m->ltsymbol, " %d", n - m->nmaster);
-	}
-	else
+	} else {
 		mw = m->ww;
-	for(i = my = ty= 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		ns = 1;
+	}
+
+	for(i = 0, my = ty = gap, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if(i < m->nmaster) {
-			h = (m->wh - my) / MIN(n, m->nmaster) - i;
-			if (m->rmaster)
-				x = m->wx + m->ww - mw;
-			else
-				x = m->wx;
+			h = (m->wh - my) / (MIN(n, m->nmaster) - i) - gap;
+			x = m->rmaster
+				? m->wx + m->ww - mw + gap/ns
+				: m->wx + gap;
 			y = m->wy + my;
-			resize(c, x, y, mw - (2*bw), h - (2*bw), bw, False);
-			my += HEIGHT(c);
+
+			resize(c, x, y, mw - (2*bw) - gap*(5-ns)/2, h - (2*bw), bw, False);
+			my += HEIGHT(c) + gap;
 		}
 		else {
-			h = (m->wh - ty);
+ 			h = m->wh - 2*gap;
 			x = m->rmaster
-				? m->wx
-				: m->wx + mw;
-			resize(c, x, m->wy+ty, m->ww - mw - (2*bw), h - (2*bw), bw, False);
+				? m->wx + gap
+				: m->wx + mw + gap/ns;
+			y = m->wy + ty;
+			resize(c, x, y, m->ww - mw - (2*bw) - gap*(5-ns)/2, h - (2*bw), bw, False);
 		}
 }
 
@@ -1750,40 +1758,49 @@ tagmon(const Arg *arg)
 void
 tile(Monitor *m)
 {
-	unsigned int i, n, h, mw, my, ty, bw;
+	unsigned int i, n, h, mw, my, ty, ns;
 	unsigned int x, y;
+	unsigned int gap = gappx;
+	unsigned int bw = borderpx;
 	Client *c;
 
 	for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++);
 	if (n == 0)
 		return;
 
-	if (n == 1)
+	if (n == 1) {
 		bw = 0;
-	else
-		bw = borderpx;
+		gap = 0;
+	};
 
-	if (n > m->nmaster)
+	if (n > m->nmaster) {
 		mw = m->nmaster
 			? m->ww * (m->rmaster ? 1.0 - m->mfact : m->mfact)
 			: 0;
-	else
+		ns = m->nmaster > 0 ? 2 : 1;
+	} else {
 		mw = m->ww;
-	for (i = my = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
+		ns = 1;
+	}
+
+	for (i = 0, my = ty = gap, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++)
 		if (i < m->nmaster) {
-			h = (m->wh - my) / MIN(n, m->nmaster) - i;
-			if (m->rmaster)
-				x = m->wx + m->ww - mw;
-			else
-				x = m->wx;
+			h = (m->wh - my) / (MIN(n, m->nmaster) - i) - gap;
+			x = m->rmaster
+				? m->wx + m->ww - mw + gap/ns
+				: m->wx + gap;
 			y = m->wy + my;
-			resize(c, x, y, mw - (2*bw), h - (2*bw), bw, 0);
-			my += HEIGHT(c);
+
+			resize(c, x, y, mw - (2*bw) - gap*(5-ns)/2, h - (2*bw), bw, False);
+			my += HEIGHT(c) + gap;
 		} else {
- 			h = (m->wh - ty) / (n - i);
-			resize(c, m->rmaster ? m->wx : m->wx + mw, m->wy + ty,
-			       m->ww - mw - (2*bw), h - (2*bw), bw, 0);
- 			ty += HEIGHT(c);
+ 			h = (m->wh - ty) / (n - i) - gap;
+			x = m->rmaster
+				? m->wx + gap
+				: m->wx + mw + gap/ns;
+			y = m->wy + ty;
+			resize(c, x, y, m->ww - mw - (2*bw) - gap*(5-ns)/2, h - (2*bw), bw, False);
+ 			ty += HEIGHT(c) + gap;
 		}
 }
 
