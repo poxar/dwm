@@ -36,6 +36,7 @@ static const Rule rules[] = {
 	{ "discord",         NULL,       NULL,       1 << 7,       0,           0,           -1 },
 	{ "TelegramDesktop", NULL,       NULL,       1 << 8,       0,           0,           -1 },
 	{ "Signal",          NULL,       NULL,       1 << 8,       0,           0,           -1 },
+	{ "ZapZap",          NULL,       NULL,       1 << 8,       0,           0,           -1 },
 
 	/* Firefow */
 	{ "firefox",         NULL,       NULL,       1 << 1,       0,           0,           -1 },
